@@ -101,6 +101,9 @@
     <Compile Include="Models\Person.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\BenefitsCalculator.cs" />
+    <Compile Include="Services\IBenefitsCalculator.cs" />
+    <Compile Include="Services\IPayrollCalculator.cs" />
+    <Compile Include="Services\PayrollCalculator.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\web.config" />
