@@ -6,7 +6,7 @@ namespace Paylocity.Tests.Services
 {
     public class BenefitsCalculatorTests
     {
-        readonly BenefitsCalculator calculator = new BenefitsCalculator();
+        readonly IBenefitsCalculator calculator = new BenefitsCalculator();
 
         [Fact]
         void EmployeeCostShouldNormallyBe1000()

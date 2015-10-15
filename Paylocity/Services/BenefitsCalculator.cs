@@ -3,7 +3,7 @@ using Paylocity.Models;
 
 namespace Paylocity.Services
 {
-    public class BenefitsCalculator
+    public class BenefitsCalculator : IBenefitsCalculator
     {
         private const decimal CostForEmployee = 1000M;
         private const decimal CostForDependent = 500M;
@@ -11,32 +11,26 @@ namespace Paylocity.Services
 
         public decimal CostOfBenefits(Employee employee)
         {
-            var employeeCost = CostForEmployee - GetDiscountForEmployee(employee);
+            var employeeCost = CostForEmployee * (1 - PercentageDiscountForPerson(employee));
             var dependentCost = CostForDependent * employee.Dependents.Count() - TotalDependentsDiscount(employee);
             return employeeCost + dependentCost;
         }
 
-        private decimal GetDiscountForEmployee(Employee employee)
+        private decimal TotalDependentsDiscount(Employee employee)
         {
-            if (PersonsNameStartsWithA(employee))
+            return employee.Dependents.Sum(dependent => CostForDependent * PercentageDiscountForPerson(dependent));
+        }
+
+        private decimal PercentageDiscountForPerson(Person person)
+        {
+            if (PersonsNameStartsWithA(person))
             {
-                return CostForEmployee * NameStartsWithADiscountPercentage;
+                return NameStartsWithADiscountPercentage;
             }
             return 0;
         }
 
-        private decimal TotalDependentsDiscount(Employee employee)
-        {
-            return employee.Dependents.Sum(dependent => DiscountForDependent(dependent));
-        }
-
-        private static decimal DiscountForDependent(Person person)
-        {
-            var qualifies = PersonsNameStartsWithA(person);
-            return qualifies ? NameStartsWithADiscountPercentage * CostForDependent : 0;
-        }
-
-        private static bool PersonsNameStartsWithA(Person person)
+        private bool PersonsNameStartsWithA(Person person)
         {
             return person.FirstName.ToLowerInvariant().StartsWith("a");
         }
